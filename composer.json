@@ -1,0 +1,12 @@
+{
+    "name": "skfz/php8-crud",
+    "description": "",
+    "require": {
+        "vlucas/phpdotenv": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Api\\": "api"
+        }
+    }
+}
