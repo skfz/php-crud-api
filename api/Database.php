@@ -2,6 +2,7 @@
 
 namespace Api;
 use \PDO;
+use Api\Model\Database as DatabaseModel;
 
 class Database {
     /**
@@ -10,49 +11,19 @@ class Database {
     private $db = null;
 
     /**
-     * @var string
-     */
-    protected $dsn = null;
-
-    /**
-     * @var string
-     */
-    protected $host = null;
-
-    /**
-     * @var integer
-     */
-    protected $port = null;
-
-    /**
-     * @var string
-     */
-    protected $dbname = null;
-
-    /**
-     * @var string
-     */
-    protected $dbuser = null;
-
-    /**
-     * @var string
-     */
-    protected $dbpwd = null;
-
-    /**
      * @var array
      */
     protected $attributes = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ];
 
-    public function __construct($config) {
-        $this->dsn = $config['dsn'];
-        $this->host = $config['host'];
-        $this->port = $config['port'];
-        $this->dbname = $config['dbname'];
-        $this->dbuser = $config['dbuser'];
-        $this->dbpwd = $config['dbpwd'];
+    /**
+     * @var object
+     */
+    protected $config = null;
+
+    public function __construct(DatabaseModel $config) {
+        $this->config = $config;
     }
 
     public function connect() {
@@ -62,12 +33,12 @@ class Database {
     /**
      * @return PDO
      */
-    final protected function getConnection() {
+    private function getConnection() {
         if ($this->db == null) {
             try {
                 $this->db = new PDO(
-                    sprintf("%s:host=%s;port=%s;dbname=%s", $this->dsn, $this->host, $this->port, $this->dbname),
-                    $this->dbuser, $this->dbpwd);
+                    sprintf("%s:host=%s;port=%s;dbname=%s", $this->config->dsn, $this->config->host, $this->config->port, $this->config->dbname),
+                    $this->config->dbuser, $this->config->dbpwd);
             } catch (\PDOException $e) {
                 exit($e->getMessage());
             }
