@@ -3,7 +3,7 @@
     "description": "",
     "require": {
         "vlucas/phpdotenv": "^5.2",
-        "nowakowskir/php-jwt": "^2.0"
+        "firebase/php-jwt": "^5.2"
     },
     "autoload": {
         "psr-4": {
