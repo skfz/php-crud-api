@@ -2,7 +2,8 @@
     "name": "skfz/php8-crud",
     "description": "",
     "require": {
-        "vlucas/phpdotenv": "^5.2"
+        "vlucas/phpdotenv": "^5.2",
+        "nowakowskir/php-jwt": "^2.0"
     },
     "autoload": {
         "psr-4": {
