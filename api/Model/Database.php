@@ -6,30 +6,30 @@ class Database {
     /**
      * @var string
      */
-    public $dsn = null;
+    public string $dsn;
 
     /**
      * @var string
      */
-    public $host = null;
+    public string $host;
 
     /**
      * @var integer
      */
-    public $port = null;
+    public int $port;
 
     /**
      * @var string
      */
-    public $dbname = null;
+    public string $dbname;
 
     /**
      * @var string
      */
-    public $dbuser = null;
+    public string $dbuser;
 
     /**
      * @var string
      */
-    public $dbpwd = null;
+    public string $dbpwd;
 }
