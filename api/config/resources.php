@@ -1,0 +1,6 @@
+<?php
+
+$resources = [
+    "Posts",
+    "Comments"
+];
