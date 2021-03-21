@@ -18,4 +18,4 @@ $dbConfig->dbuser = $_ENV['DB_USERNAME'];
 $dbConfig->dbpwd = $_ENV['DB_PASSWORD'];
 
 $dbConnection = new Database($dbConfig);
-
+$conn = $dbConnection->connect();
