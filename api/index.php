@@ -16,17 +16,22 @@ $request = new Request(
     $_SERVER['REQUEST_METHOD']
 );
 
-$resourceClass = ClassFactory::getClassName($request->resourceType);
+$classFactory = new ClassFactory;
+$className = $classFactory->getClassName($request->resourceType);
 
 switch ($request->method) {
     case "GET":
-        return new $resourceClass->fetchResource($request->resourceId);
+        $resourceClass = new $className;
+        return $resourceClass->fetchResource($request->resourceId);
     case "POST":
-        return new $resourceClass->postData();
+        $resourceClass = new $className;
+        return $resourceClass->postData();
     case "DELETE":
-        return new $resourceClass->deleteResource($request->resourceId);
+        $resourceClass = new $className;
+        return $resourceClass->deleteResource($request->resourceId);
     case "PUT":
-        return new $resourceClass->updateData($request->resourceId);
+        $resourceClass = new $className;
+        return $resourceClass->updateData($request->resourceId);
     default: echo "Nothing to do";
         break;
 }

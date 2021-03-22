@@ -55,7 +55,7 @@ class Request {
             exit();
         }
 
-        if (!in_array($this->method, $allowedMethods)) {
+        if (!in_array($this->method, $this->allowedMethods)) {
             $this->method = null;
             header("HTTP/1.1 405 Method not allowed");
             exit();

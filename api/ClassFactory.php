@@ -2,8 +2,6 @@
 
 namespace Api;
 
-require_once 'config/resources.php';
-
 class ClassFactory {
 
     /**
@@ -12,15 +10,20 @@ class ClassFactory {
     private array $validResources;
 
     public function __construct() {
-        $this->validResources = $resources;
+        $this->validResources = include('config/resources.php');
     }
 
+    /**
+     * @param string
+     * @return string
+     */
     public function getClassName($type) {
         $type = ucwords($type);
         if (!in_array($type, $this->validResources)) {
             header("HTTP/1.1 404 Not found");
             exit();
         }
-        return new $type;
+        $controller = "Api\\Controller\\" . $type . "Controller";
+        return $controller;
     }
 }

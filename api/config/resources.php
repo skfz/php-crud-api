@@ -1,6 +1,6 @@
 <?php
 
-$resources = [
-    "Posts",
-    "Comments"
+return [
+    "Post",
+    "Comment"
 ];
