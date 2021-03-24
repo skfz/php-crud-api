@@ -21,17 +21,26 @@ $className = $classFactory->getClassName($request->resourceType);
 
 switch ($request->method) {
     case "GET":
-        $resourceClass = new $className;
-        return $resourceClass->fetchResource($request->resourceId);
+        $resourceClass = new $className($conn);
+        $response = $resourceClass->fetchResource($request->resourceId);
+        break;
     case "POST":
         $resourceClass = new $className;
-        return $resourceClass->postData();
+        $response = $resourceClass->postData();
+        break;
     case "DELETE":
         $resourceClass = new $className;
-        return $resourceClass->deleteResource($request->resourceId);
+        $response = $resourceClass->deleteResource($request->resourceId);
+        break;
     case "PUT":
         $resourceClass = new $className;
-        return $resourceClass->updateData($request->resourceId);
+        $response = $resourceClass->updateData($request->resourceId);
+        break;
     default: echo "Nothing to do";
         break;
+}
+
+header($response['status_code']);
+if ($response['body']) {
+    echo $response['body'];
 }
