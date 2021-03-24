@@ -3,6 +3,7 @@
 namespace Api\Controller;
 use \PDO;
 use Api\ResourceInterface;
+use Api\Helper;
 
 class PostController implements ResourceInterface {
 
@@ -16,8 +17,8 @@ class PostController implements ResourceInterface {
         $query = "SELECT * FROM posts";
         $params = [];
         if (intval($id)) {
-            $query .= " WHERE id=?";
-            $params[] = $id;
+            $query .= " WHERE id=:id";
+            $params[':id'] = $id;
         }
 
         $stmt = $this->conn->prepare($query);
@@ -36,7 +37,31 @@ class PostController implements ResourceInterface {
     }
 
     public function postData() {
+        $data = json_decode(file_get_contents('php://input'), TRUE);
+        $post = filter_var($data['post'], FILTER_SANITIZE_STRING);
+        $date = $data['post_date'];
+        
+        if (!$post || !Helper::validateDate($date)) {
+            $response['status_code'] = 'HTTP/1.1 422 Unprocessable Entity';
+            $response['body'] = null;
+            return $response;
+        }
 
+        $query = "INSERT INTO posts (post, post_date) VALUES (:post, :post_date)";
+        $stmt = $this->conn->prepare($query);
+        try {
+            $stmt->execute([
+                ':post' => $post,
+                ':post_date' => $date
+            ]);
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+
+        $response['status_code'] = 'HTTP/1.1 201 Created';
+        $response['body'] = json_encode(['message' => 'Post created']);
+
+        return $response;
     }
 
     public function deleteResource($id) {

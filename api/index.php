@@ -25,15 +25,15 @@ switch ($request->method) {
         $response = $resourceClass->fetchResource($request->resourceId);
         break;
     case "POST":
-        $resourceClass = new $className;
+        $resourceClass = new $className($conn);
         $response = $resourceClass->postData();
         break;
     case "DELETE":
-        $resourceClass = new $className;
+        $resourceClass = new $className($conn);
         $response = $resourceClass->deleteResource($request->resourceId);
         break;
     case "PUT":
-        $resourceClass = new $className;
+        $resourceClass = new $className($conn);
         $response = $resourceClass->updateData($request->resourceId);
         break;
     default: echo "Nothing to do";
