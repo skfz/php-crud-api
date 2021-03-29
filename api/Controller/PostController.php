@@ -58,17 +58,69 @@ class PostController implements ResourceInterface {
             exit($e->getMessage());
         }
 
-        $response['status_code'] = 'HTTP/1.1 201 Created';
+        $response['status_code'] = 'HTTP/1.1 200 OK';
         $response['body'] = json_encode(['message' => 'Post created']);
 
         return $response;
     }
 
     public function deleteResource($id) {
+        if (!intval($id)) {
+            $response['status_code'] = 'HTTP/1.1 422 Unprocessable Entity';
+            $response['body'] = null;
+            return $response;
+        }
 
+        $query = "DELETE from posts WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        try {
+            $stmt->execute([':id' => $id]);
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+
+        $response['status_code'] = 'HTTP/1.1 200 OK';
+        $response['body'] = json_encode(['message' => 'Post deleted']);
+
+        return $response;
     }
 
     public function updateData($id) {
+        $data = json_decode(file_get_contents('php://input'), TRUE);
+        $post = filter_var($data['post'], FILTER_SANITIZE_STRING);
+        $date = $data['post_date'];
+        
+        if (!$post && !Helper::validateDate($date) || !intval($id)) {
+            $response['status_code'] = 'HTTP/1.1 422 Unprocessable Entity';
+            $response['body'] = null;
+            return $response;
+        }
 
+        $fields = [];
+        $params = [
+            ':id' => $id
+        ];
+
+        $query = "UPDATE posts SET ";
+        if ($post) {
+            $query .= "post = :post";
+            $params[':post'] = $post;
+        }
+        if ($date) {
+            $query .= ",post_date = :date";
+            $params[':date'] = $date;
+        }
+        $query .= " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        try {
+            $stmt->execute($params);
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+
+        $response['status_code'] = 'HTTP/1.1 200 OK';
+        $response['body'] = json_encode(['message' => 'Post updated']);
+
+        return $response;
     }
 }
